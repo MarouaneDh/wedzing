@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { getOneUser } from './userAsyncThunk';
+import { getOneUser, getPartnerUser } from './userAsyncThunk';
 
 const initialState = {
     user: {
@@ -7,6 +7,12 @@ const initialState = {
         status: null,
         error: null,
         user: null,
+    },
+    partner: {
+        isLoading: false,
+        status: null,
+        error: null,
+        partner: null,
     }
 };
 
@@ -31,6 +37,23 @@ export const userSlice = createSlice({
                 state.user.isLoading = false;
                 state.user.status = 'rejected';
                 state.user.error = action.payload;
+            })
+
+            //get partner user
+            .addCase(getPartnerUser.pending, (state) => {
+                state.partner.isLoading = true;
+                state.partner.status = 'pending'
+                state.partner.error = null
+            })
+            .addCase(getPartnerUser.fulfilled, (state, action) => {
+                state.partner.isLoading = false;
+                state.partner.status = 'fulfilled'
+                state.partner.partner = action.payload.response
+            })
+            .addCase(getPartnerUser.rejected, (state, action) => {
+                state.partner.isLoading = false;
+                state.partner.status = 'rejected';
+                state.partner.error = action.payload;
             })
     },
 });

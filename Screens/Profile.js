@@ -1,14 +1,24 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { Image, SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native'
+import { Image, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
+
+import { getOneUser, getPartnerUser } from '../redux/slices/user/userAsyncThunk'
+
 import globalStyle from '../styles/styles'
-import { getOneUser } from '../redux/slices/user/userAsyncThunk'
 
 const Profile = () => {
     const dispatch = useDispatch()
 
     const user = useSelector((state) => state.user.user)
+    const partner = useSelector((state) => state.user.partner)
+
+    const [isEdit, setIsEdit] = useState(false)
+    const [data, setData] = useState({
+        firstName: '',
+        lastName: '',
+        phoneNumber: ''
+    })
 
     const ProfilePic = () => {
         if (user?.user?.role === "husband") {
@@ -23,29 +33,97 @@ const Profile = () => {
         }
     }
 
+    const toggleIsEdit = () => {
+        setIsEdit(!isEdit)
+    }
+
+    const inputChangeHandler = (e, name) => {
+        setData((initialState) => (
+            {
+                ...initialState,
+                [name]: e
+            }
+        ))
+    }
+
+    const editProfileHandler = () => {
+        setTimeout(() => {
+            setIsEdit(!isEdit)
+        }, 1500);
+    }
+
     useEffect(() => {
         dispatch(getOneUser())
+        dispatch(getPartnerUser())
     }, [dispatch])
 
     return (
-        <SafeAreaView style={globalStyle.container}>
-            <View style={styles.container}>
-                <View>
-                    {ProfilePic()}
+        isEdit ?
+            <SafeAreaView style={globalStyle.container}>
+                <View style={styles.container}>
+                    <ScrollView>
+                        {ProfilePic()}
+                        <View>
+                            <View style={styles.oneInput}>
+                                <Text style={styles.label}>First name</Text>
+                                <TextInput
+                                    placeholderTextColor='#919191'
+                                    placeholder="Type your first name"
+                                    style={styles.input}
+                                    textContentType='givenName'
+                                    onChangeText={(e) => inputChangeHandler(e, 'firstName')}
+                                    value={data.firstName}
+                                />
+                            </View>
+                            <View style={styles.oneInput}>
+                                <Text style={styles.label}>Last name</Text>
+                                <TextInput
+                                    placeholderTextColor='#919191'
+                                    placeholder="Type your last name"
+                                    style={styles.input}
+                                    textContentType='familyName'
+                                    onChangeText={(e) => inputChangeHandler(e, 'lastName')}
+                                    value={data.lastName}
+                                />
+                            </View>
+                            <View style={styles.oneInput}>
+                                <Text style={styles.label}>Phone number</Text>
+                                <TextInput
+                                    placeholderTextColor='#919191'
+                                    placeholder="Type your phone number"
+                                    style={styles.input}
+                                    textContentType='telephoneNumber'
+                                    keyboardType='number-pad'
+                                    onChangeText={(e) => inputChangeHandler(e, 'phoneNumber')}
+                                    value={data.phoneNumber}
+                                />
+                            </View>
+                        </View>
+                    </ScrollView>
+                    <Pressable onPress={editProfileHandler} style={styles.editButton}>
+                        <Image style={styles.editImage} source={require('../assets/edit.png')} />
+                        <Text style={styles.editText}>Save changes</Text>
+                    </Pressable>
+                </View>
+            </SafeAreaView> :
+            <SafeAreaView style={globalStyle.container}>
+                <View style={styles.container}>
                     <View>
-                        <Text style={styles.text}>Name : {user?.user.firstName} {user?.user.lastName}</Text>
-                        <Text style={styles.text}>Phone number : {user?.user.phoneNumber}</Text>
-                        <Text style={styles.text}>Email : {user?.user.email}</Text>
-                        <Text style={styles.text}>Role : {user?.user.role}</Text>
-                        <Text style={styles.text}>Partner : {user?.user.partner}</Text>
+                        {ProfilePic()}
+                        <View>
+                            <Text style={styles.text}>Name : {user?.user?.firstName} {user?.user?.lastName}</Text>
+                            <Text style={styles.text}>Phone number : {user?.user?.phoneNumber}</Text>
+                            <Text style={styles.text}>Email : {user?.user?.email}</Text>
+                            <Text style={styles.text}>Role : {user?.user?.role}</Text>
+                            <Text style={styles.text}>Partner : {partner?.partner?.firstName} {partner?.partner?.lastName}</Text>
+                        </View>
                     </View>
+                    <Pressable onPress={toggleIsEdit} style={styles.editButton}>
+                        <Image style={styles.editImage} source={require('../assets/edit.png')} />
+                        <Text style={styles.editText}>Edit profile</Text>
+                    </Pressable>
                 </View>
-                <View style={styles.editButton}>
-                    <Image style={styles.editImage} source={require('../assets/edit.png')} />
-                    <Text style={styles.editText}>Edit profile</Text>
-                </View>
-            </View>
-        </SafeAreaView>
+            </SafeAreaView>
     )
 }
 
@@ -53,7 +131,7 @@ export default Profile
 
 const styles = StyleSheet.create({
     container: {
-        alignItems: 'center',
+        alignItems: 'stretch',
         justifyContent: 'space-between',
         height: '100%',
         paddingVertical: 25
@@ -77,9 +155,8 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
         borderRadius: 6,
         padding: 10,
-        width: 220,
         borderColor: "white",
-        borderWidth: 1
+        borderWidth: 1,
     },
     editImage: {
         height: 40,
@@ -89,5 +166,26 @@ const styles = StyleSheet.create({
     editText: {
         color: 'white',
         fontSize: 25
-    }
+    },
+    oneInput: {
+        marginTop: 5,
+        marginBottom: 20,
+    },
+    input: {
+        height: 65,
+        borderWidth: 1,
+        borderColor: '#c2c2c2',
+        padding: 10,
+        width: "100%",
+        borderRadius: 10,
+        marginTop: 3,
+        backgroundColor: '#000',
+        fontSize: 20,
+        color: '#fff',
+    },
+    label: {
+        color: '#fff',
+        fontWeight: '600',
+        fontSize: 20
+    },
 })

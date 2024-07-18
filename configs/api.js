@@ -1,4 +1,4 @@
-export const API_HOST = "https://wedz.adaptable.app/api/";
+export const API_HOST = "https://wedzing.adaptable.app/api/";
 
 export const API = {
     auth: {
