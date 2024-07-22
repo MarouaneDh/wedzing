@@ -14,7 +14,7 @@ const OneListItem = ({ listItem }) => {
     return (
         <View>
             <Pressable style={styles.item} onPress={() => setIsModalVisible(true)}>
-                <Image style={styles.stretch} source={!listItem?.imageURLs[0] ? require('../assets/default-image.png') : { uri: listItem?.imageURLs[0] }} />
+                <Image style={styles.oneItemImage} source={!listItem?.imageURLs[0] ? require('../assets/default-image.png') : { uri: listItem?.imageURLs[0] }} />
                 <Text>
                     {listItem.item} bought <Text style={stats === 0 ? styles.statTextZero : stats === 1 ? styles.statTextfull : styles.statTextPending}>{listItem.numberOfItemsBought}/{listItem.numberOfItems}</Text>
                 </Text>
@@ -46,10 +46,11 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: 'black'
     },
-    stretch: {
+    oneItemImage: {
         height: 50,
         width: 50,
-        marginRight: 20
+        marginRight: 20,
+        objectFit: 'scale-down'
     },
     statTextZero: {
         color: 'red',

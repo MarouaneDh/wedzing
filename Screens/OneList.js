@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
     stretch: {
         height: 25,
         width: 25,
-        marginRight: 20
+        marginRight: 20,
     },
 })
 

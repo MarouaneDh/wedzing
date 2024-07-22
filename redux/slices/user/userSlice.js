@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { getOneUser, getPartnerUser } from './userAsyncThunk';
+import { editOneUser, getOneUser, getPartnerUser } from './userAsyncThunk';
 
 const initialState = {
     user: {
@@ -13,7 +13,13 @@ const initialState = {
         status: null,
         error: null,
         partner: null,
-    }
+    },
+    editUser: {
+        isLoading: false,
+        status: null,
+        error: null,
+        editUser: null,
+    },
 };
 
 export const userSlice = createSlice({
@@ -54,6 +60,23 @@ export const userSlice = createSlice({
                 state.partner.isLoading = false;
                 state.partner.status = 'rejected';
                 state.partner.error = action.payload;
+            })
+
+            //edit one user
+            .addCase(editOneUser.pending, (state) => {
+                state.editUser.isLoading = true;
+                state.editUser.status = 'pending'
+                state.editUser.error = null
+            })
+            .addCase(editOneUser.fulfilled, (state, action) => {
+                state.editUser.isLoading = false;
+                state.editUser.status = 'fulfilled'
+                state.editUser.editUser = action.payload
+            })
+            .addCase(editOneUser.rejected, (state, action) => {
+                state.editUser.isLoading = false;
+                state.editUser.status = 'rejected';
+                state.editUser.error = action.payload;
             })
     },
 });

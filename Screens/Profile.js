@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { Image, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
+import { ActivityIndicator, Image, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
 
-import { getOneUser, getPartnerUser } from '../redux/slices/user/userAsyncThunk'
+import { editOneUser, getOneUser, getPartnerUser } from '../redux/slices/user/userAsyncThunk'
 
 import globalStyle from '../styles/styles'
 
@@ -11,6 +11,7 @@ const Profile = () => {
     const dispatch = useDispatch()
 
     const user = useSelector((state) => state.user.user)
+    const editUser = useSelector((state) => state.user.editUser)
     const partner = useSelector((state) => state.user.partner)
 
     const [isEdit, setIsEdit] = useState(false)
@@ -47,15 +48,20 @@ const Profile = () => {
     }
 
     const editProfileHandler = () => {
-        setTimeout(() => {
-            setIsEdit(!isEdit)
-        }, 1500);
+        dispatch(editOneUser(data))
     }
 
     useEffect(() => {
         dispatch(getOneUser())
         dispatch(getPartnerUser())
     }, [dispatch])
+
+    useEffect(() => {
+        if (editUser?.status === "fulfilled") {
+            dispatch(getOneUser())
+            setIsEdit(false)
+        }
+    }, [editUser?.status])
 
     return (
         isEdit ?
@@ -101,7 +107,11 @@ const Profile = () => {
                         </View>
                     </ScrollView>
                     <Pressable onPress={editProfileHandler} style={styles.editButton}>
-                        <Image style={styles.editImage} source={require('../assets/edit.png')} />
+                        {
+                            editUser?.isLoading ?
+                                <ActivityIndicator color="white" size={40} /> :
+                                <Image style={styles.editImage} source={require('../assets/edit.png')} />
+                        }
                         <Text style={styles.editText}>Save changes</Text>
                     </Pressable>
                 </View>
