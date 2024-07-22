@@ -19,6 +19,7 @@ import { getAllLists } from '../redux/slices/list/listAsyncThunk';
 import { getOneUser } from '../redux/slices/user/userAsyncThunk';
 
 import globalStyle from '../styles/styles';
+import { getAllKeys } from '../helpers/storage';
 
 const Dashboard = () => {
     const dispatch = useDispatch()
@@ -35,7 +36,7 @@ const Dashboard = () => {
         navigation.navigate('Profile')
     }
 
-    const logoutUser = () => {
+    const logoutUser = async () => {
         dispatch(logout())
     }
 
@@ -55,15 +56,15 @@ const Dashboard = () => {
     useEffect(() => {
         dispatch(getAllLists())
         dispatch(getOneUser())
-    }, [dispatch])
+    }, [dispatch, navigation])
 
     return (
         <RefreshWrapper onRefresh={() => dispatch(getAllLists())}>
             <SafeAreaView style={globalStyle.container}>
                 <View style={styles.header}>
-                    <Pressable onPress={() => toProfile()}>
+                    {user?.user?.role && <Pressable onPress={() => toProfile()}>
                         {ProfilePic()}
-                    </Pressable>
+                    </Pressable>}
                     <Text style={styles.screenTitle}>Your Lists</Text>
                     <Pressable onPress={() => logoutUser()}>
                         <Image style={styles.headerImages} source={require('../assets/logout.png')} />

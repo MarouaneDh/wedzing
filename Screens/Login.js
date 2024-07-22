@@ -63,9 +63,6 @@ const Login = () => {
     useEffect(() => {
         if (auth?.data?.token) {
             showToast('success', auth?.data?.msg)
-            storeData("token", auth.data.token)
-            storeData("userID", auth.data.user._id)
-            storeData("userPartner", auth.data.user.partner)
         }
         if (auth?.error) {
             showToast('danger', auth?.error?.errors[0]?.msg)

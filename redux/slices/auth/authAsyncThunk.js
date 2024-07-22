@@ -1,5 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { API, API_HOST } from '../../../configs/api';
+import { storeData } from '../../../helpers/storage';
 
 export const login = createAsyncThunk(
     'auth/login',
@@ -22,6 +23,9 @@ export const login = createAsyncThunk(
             }
 
             const data = await response.json();
+            await storeData("token", data.token)
+            await storeData("userID", data.user._id)
+            await storeData("userPartner", data.user.partner)
             return fulfillWithValue(data);
         } catch (error) {
             console.error('Error:', error);

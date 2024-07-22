@@ -17,10 +17,12 @@ export const authSlice = createSlice({
     initialState,
     reducers: {
         logout: (state) => {
+            removeAsyncStorageData();
             state.auth.data = null;
             state.auth.status = null;
+            state.auth.error = null;
             state.auth.isLoggedIn = false;
-            removeAsyncStorageData('token');
+            state.auth.isLoading = false
         },
     },
     extraReducers: (builder) => {

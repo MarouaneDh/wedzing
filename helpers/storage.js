@@ -8,9 +8,22 @@ export const storeData = async (valueName, value) => {
     }
 };
 
-export const removeAsyncStorageData = async (valueName) => {
+export const getAllKeys = async () => {
+    let keys = []
     try {
-        await AsyncStorage.removeItem(valueName);
+        keys = await AsyncStorage.getAllKeys()
+    } catch (e) {
+        console.log('getAllKeys error: ', e)
+    }
+
+    console.log(keys)
+}
+
+export const removeAsyncStorageData = async () => {
+    try {
+        await AsyncStorage.clear().then((e) => {
+            console.log(e)
+        });
     } catch (e) {
         console.log('removeAsyncStorageData error: ', e)
     }
