@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Pressable, StyleSheet } from 'react-native';
 import { TriangleColorPicker, toHsv } from 'react-native-color-picker';
 
 const Settings = ({ route }) => {
@@ -41,12 +41,13 @@ const Settings = ({ route }) => {
 
     return (
         <View style={{ flex: 1, padding: 45, backgroundColor: color }}>
-            <Text style={{ color: colorV >= 0.8 ? 'black' : 'white' }}>
-                Choose your color
-            </Text>
+            <Pressable style={styles.chooseColor}>
+                <Text style={{ color: 'black', textAlign: 'center', fontSize: 18, fontWeight: '500' }}>
+                    Choose this color
+                </Text>
+            </Pressable>
 
             <TriangleColorPicker
-                oldColor="purple"
                 color={color}
                 onColorChange={onColorChange}
                 onColorSelected={(color) => alert(`Color selected: ${color}`)}
@@ -56,5 +57,16 @@ const Settings = ({ route }) => {
         </View>
     );
 };
+
+const styles = StyleSheet.create({
+    chooseColor: {
+        backgroundColor: 'white',
+        padding: 10,
+        borderRadius: 8,
+        elevation: 10,
+        width: 220,
+        alignSelf: 'center',
+    }
+})
 
 export default Settings
