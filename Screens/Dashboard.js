@@ -19,7 +19,7 @@ import { getAllLists } from '../redux/slices/list/listAsyncThunk';
 import { getOneUser } from '../redux/slices/user/userAsyncThunk';
 
 import globalStyle from '../styles/styles';
-import { getAllKeys } from '../helpers/storage';
+import { logoutUserData } from '../redux/slices/user/userSlice';
 
 const Dashboard = () => {
     const dispatch = useDispatch()
@@ -38,6 +38,7 @@ const Dashboard = () => {
 
     const logoutUser = async () => {
         dispatch(logout())
+        dispatch(logoutUserData())
     }
 
     const ProfilePic = () => {
@@ -56,7 +57,7 @@ const Dashboard = () => {
     useEffect(() => {
         dispatch(getAllLists())
         dispatch(getOneUser())
-    }, [dispatch, navigation])
+    }, [dispatch])
 
     return (
         <RefreshWrapper onRefresh={() => dispatch(getAllLists())}>
@@ -79,7 +80,7 @@ const Dashboard = () => {
                         {
                             lists?.lists?.map((item) => {
                                 return (
-                                    <ListItem listId={item._id} listName={item.listName} listCategory={item.listCategory} key={item._id} />
+                                    <ListItem listId={item._id} listName={item.listName} listCategory={item.listCategory} stat={item.stat} key={item._id} />
                                 )
                             })
                         }

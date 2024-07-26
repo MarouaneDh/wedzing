@@ -164,7 +164,8 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        width: '100%'
+        width: '100%',
+        paddingHorizontal: 10
     },
     editDeleteElement: {
         backgroundColor: '#ebebeb',
@@ -174,7 +175,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         flexDirection: 'row',
         borderRadius: 25,
-        width: 150,
+        width: 170,
         padding: 10
     },
     item: {

@@ -145,7 +145,7 @@ const AddListItem = ({ setModalVisible, list }) => {
                 {
                     newList?.map((item, index) => {
                         return (
-                            <OneItemForm setNewList={setNewList} takePicture={takePicture} deleteItemHandler={deleteItemHandler} index={index} key={index} itemIndex={itemIndex} item={item} imageURLs={item?.imageURLs} />
+                            <OneItemForm newList={newList} setNewList={setNewList} takePicture={takePicture} deleteItemHandler={deleteItemHandler} index={index} key={index} itemIndex={itemIndex} item={item} imageURLs={item?.imageURLs} />
                         )
                     })
                 }

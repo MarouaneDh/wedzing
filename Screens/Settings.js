@@ -50,7 +50,7 @@ const Settings = ({ route }) => {
                 color={color}
                 onColorChange={onColorChange}
                 onColorSelected={(color) => alert(`Color selected: ${color}`)}
-                onOldColorSelected={(color) => alert(`Old color selected: ${color}`)}
+                onOldColorSelected={() => alert(`Old color selected: ${color}`)}
                 style={{ flex: 1 }}
             />
         </View>

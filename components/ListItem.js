@@ -1,10 +1,13 @@
-import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react'
-import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
-const ListItem = ({ listName, listCategory, listId }) => {
+import { Image, Pressable, StyleSheet, Text } from 'react-native';
+import ProgressBar from 'react-native-progress/Bar'
+
+const ListItem = ({ listName, listCategory, listId, stat }) => {
     const navigation = useNavigation()
     const [pressed, setPressed] = useState(false)
+    const [colorProgress, setColorProgress] = useState("red")
 
     const assetMap = {
         kitchen: require('../assets/kitchen.png'),
@@ -26,10 +29,25 @@ const ListItem = ({ listName, listCategory, listId }) => {
         }
     }, [pressed])
 
+    useEffect(() => {
+        if (stat === 100) {
+            setColorProgress("#089908")
+        }
+        if (stat < 100 && stat > 50) {
+            setColorProgress("#d1651d")
+        }
+        if (stat < 50) {
+            setColorProgress("red")
+        }
+    }, [stat])
+
+
     return (
         <Pressable onPress={() => setPressed(true)} style={!pressed ? styles.item : styles.itemPressed}>
             <Image style={styles.stretch} source={imageSource} />
             <Text style={styles.title}>{listName}</Text>
+            <Text style={[styles.stat, { color: colorProgress }]}>{stat}%</Text>
+            <ProgressBar color={colorProgress} style={styles.progress} progress={stat / 100} />
         </Pressable>
     );
 }
@@ -62,7 +80,12 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 18,
         color: 'black',
-        textAlign: 'center'
+        textAlign: 'center',
+        marginTop: 5
+    },
+    stat: {
+        marginTop: 5,
+        fontSize: 18
     },
     stretch: {
         height: 50,

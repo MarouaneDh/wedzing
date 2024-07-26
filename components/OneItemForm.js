@@ -11,15 +11,21 @@ const OneItemForm = ({ item, takePicture, index, itemIndex, deleteItemHandler, s
     const [numberToBuyError, setNumberToBuyError] = useState(false)
 
     const deleteImageHandler = (urlIndex) => {
-        // let imgs = item?.imageURLs.filter((_, i) => i !== urlIndex)
-        // setNewList((prevState) => {
-        //     return {
-        //         ...prevState,
-        //         ...prevState[itemIndex],
-        //         imageURLs: imgs
-        //     }
-        // })
-    }
+        let imgs = item?.imageURLs.filter((_, i) => i !== urlIndex);
+        setNewList((prevState) => {
+            const updatedList = prevState.map((item, prevIndex) => {
+                if (prevIndex === index) {
+                    return {
+                        ...item,
+                        imageURLs: imgs
+                    };
+                }
+                return item;
+            });
+            return updatedList;
+        });
+    };
+
 
     const handleChange = (name, e) => {
         setOneItems((prevState) => {
@@ -109,7 +115,7 @@ const OneItemForm = ({ item, takePicture, index, itemIndex, deleteItemHandler, s
                         item?.imageURLs?.map((img, index) => {
                             return (
                                 <View key={index}>
-                                    <Image key={Math.random()} style={styles.stretch} source={{ uri: img }} />
+                                    <Image style={styles.stretch} source={{ uri: img }} />
                                     <Pressable onPress={() => deleteImageHandler(index)} style={styles.deletePicContainer}>
                                         <Image style={styles.stretchDelete} source={require('../assets/delete.png')} />
                                     </Pressable>

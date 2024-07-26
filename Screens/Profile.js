@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useNavigation } from '@react-navigation/native'
 
 import { ActivityIndicator, Image, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
 
@@ -9,6 +10,7 @@ import globalStyle from '../styles/styles'
 
 const Profile = () => {
     const dispatch = useDispatch()
+    const navigation = useNavigation()
 
     const user = useSelector((state) => state.user.user)
     const editUser = useSelector((state) => state.user.editUser)
@@ -117,15 +119,17 @@ const Profile = () => {
                 </View>
             </SafeAreaView> :
             <SafeAreaView style={globalStyle.container}>
+                <Pressable onPress={() => navigation.navigate('Settings')}>
+                    <Image style={styles.settings} source={require('../assets/settings.png')} />
+                </Pressable>
                 <View style={styles.container}>
                     <View>
                         {ProfilePic()}
                         <View>
-                            <Text style={styles.text}>Name : {user?.user?.firstName} {user?.user?.lastName}</Text>
-                            <Text style={styles.text}>Phone number : {user?.user?.phoneNumber}</Text>
-                            <Text style={styles.text}>Email : {user?.user?.email}</Text>
-                            <Text style={styles.text}>Role : {user?.user?.role}</Text>
-                            <Text style={styles.text}>Partner : {partner?.partner?.firstName} {partner?.partner?.lastName}</Text>
+                            <Text style={styles.text}>{user?.user?.firstName} {user?.user?.lastName}</Text>
+                            <Text style={styles.text}>{user?.user?.phoneNumber}</Text>
+                            <Text style={styles.text}>{user?.user?.email}</Text>
+                            <Text style={styles.text}>{partner?.partner?.firstName} {partner?.partner?.lastName}'s {user?.user?.role}</Text>
                         </View>
                     </View>
                     <Pressable onPress={toggleIsEdit} style={styles.editButton}>
@@ -144,7 +148,8 @@ const styles = StyleSheet.create({
         alignItems: 'stretch',
         justifyContent: 'space-between',
         height: '100%',
-        paddingVertical: 25
+        paddingVertical: 25,
+        paddingHorizontal: 15
     },
     headerImages: {
         height: 100,
@@ -156,7 +161,7 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 20,
         color: 'white',
-        marginBottom: 10
+        marginBottom: 10,
     },
     editButton: {
         backgroundColor: '#000000',
@@ -172,6 +177,14 @@ const styles = StyleSheet.create({
         height: 40,
         width: 40,
         resizeMode: 'center',
+    },
+    settings: {
+        height: 40,
+        width: 40,
+        resizeMode: 'center',
+        position: 'absolute',
+        top: 20,
+        left: 15
     },
     editText: {
         color: 'white',
