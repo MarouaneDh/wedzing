@@ -12,6 +12,7 @@ import Profile from '../Screens/Profile';
 import { useEffect, useState } from 'react';
 import { getAsyncStorageData } from '../helpers/storage';
 import { getOneUser } from '../redux/slices/user/userAsyncThunk';
+import SplashScreen from '../Screens/SplashScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -35,14 +36,16 @@ const Navigation = () => {
 
   return (
     user?.user?.password || token || auth?.auth?.token ?
-      <Stack.Navigator screenOptions={{ headerShown: true }} initialRouteName="Dashboard">
+      <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="SplashScreen">
+        <Stack.Screen name="SplashScreen" component={SplashScreen} />
         <Stack.Screen name="Dashboard" component={Dashboard} />
         <Stack.Screen name="Settings" component={Settings} />
         <Stack.Screen name="OneList" component={OneList} />
         <Stack.Screen name="AddNewList" component={AddNewList} />
         <Stack.Screen name="Profile" component={Profile} />
       </Stack.Navigator> :
-      <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="Login">
+      <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="SplashScreen">
+        <Stack.Screen name="SplashScreen" component={SplashScreen} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Register" component={Register} />
       </Stack.Navigator>
